@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Cleaning Service App - Design Preview</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .screen {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            background: #ffffff;
+            border-top: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        
+        .nav-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .nav-item.active {
+            background: #3498db;
+        }
+        
+        .nav-item.active .nav-text {
+            color: #ffffff;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-text {
+            font-size: 10px;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        /* Login Screen Styles */
+        .login-container {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        
+        .login-logo {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        
+        .login-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        
+        .login-subtitle {
+            font-size: 16px;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+        }
+        
+        .login-form {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f8f9fa;
+            box-sizing: border-box;
+        }
+        
+        .role-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .role-button {
+            flex: 1;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e1e8ed;
+            background: #f8f9fa;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .role-button.active {
+            background: #3498db;
+            border-color: #3498db;
+        }
+        
+        .role-button-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+        
+        .role-button.active .role-button-text {
+            color: #ffffff;
+        }
+        
+        .login-button {
+            background: #3498db;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .login-button:hover {
+            background: #2980b9;
+        }
+        
+        .login-button-text {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .register-button {
+            text-align: center;
+            margin-top: 16px;
+            cursor: pointer;
+        }
+        
+        .register-button-text {
+            color: #3498db;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .test-accounts {
+            margin-top: 32px;
+            padding: 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        
+        .test-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 8px;
+        }
+        
+        .test-account {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 4px;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard-container {
+            padding-bottom: 80px;
+        }
+        
+        .header {
+            padding: 24px;
+            background: #ffffff;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        
+        .welcome-text {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 4px;
+        }
+        
+        .user-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .user-email {
+            font-size: 14px;
+            color: #95a5a6;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 16px;
+            gap: 12px;
+        }
+        
+        .stat-card {
+            width: calc(50% - 6px);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .menu-container {
+            padding: 16px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 16px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .menu-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 20px;
+        }
+        
+        .menu-content {
+            flex: 1;
+        }
+        
+        .menu-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .menu-subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .menu-arrow {
+            font-size: 20px;
+            color: #bdc3c7;
+        }
+        
+        .badge {
+            background: #e74c3c;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+
+        const App = () => {
+            const [currentScreen, setCurrentScreen] = useState('login');
+            const [userType, setUserType] = useState('CUSTOMER');
+
+            const customerStats = [
+                { label: 'My Houses', value: '3', icon: '🏠', color: '#3498db' },
+                { label: 'Active Jobs', value: '2', icon: '📋', color: '#f39c12' },
+                { label: 'Completed', value: '12', icon: '✅', color: '#27ae60' },
+                { label: 'Reviews', value: '8', icon: '⭐', color: '#e74c3c' },
+            ];
+
+            const cleanerStats = [
+                { label: 'Available Jobs', value: '5', icon: '📋', color: '#3498db' },
+                { label: 'Active Jobs', value: '3', icon: '🧹', color: '#f39c12' },
+                { label: 'Completed', value: '28', icon: '✅', color: '#27ae60' },
+                { label: 'Rating', value: '4.8', icon: '⭐', color: '#e74c3c' },
+            ];
+
+            const customerMenuItems = [
+                { 
+                    title: 'Manage Houses', 
+                    subtitle: 'Add, edit, or remove your properties',
+                    icon: '🏠',
+                    color: '#3498db'
+                },
+                { 
+                    title: 'Post New Job', 
+                    subtitle: 'Request cleaning services',
+                    icon: '➕',
+                    color: '#27ae60'
+                },
+                { 
+                    title: 'My Jobs', 
+                    subtitle: 'Track your cleaning requests',
+                    icon: '📋',
+                    color: '#f39c12'
+                },
+                { 
+                    title: 'Reviews', 
+                    subtitle: 'Rate and view service feedback',
+                    icon: '⭐',
+                    color: '#e74c3c'
+                },
+                { 
+                    title: 'Profile', 
+                    subtitle: 'Manage your account settings',
+                    icon: '👤',
+                    color: '#9b59b6'
+                },
+            ];
+
+            const cleanerMenuItems = [
+                { 
+                    title: 'Available Jobs', 
+                    subtitle: 'Browse and accept new cleaning opportunities',
+                    icon: '📋',
+                    color: '#3498db',
+                    badge: '5'
+                },
+                { 
+                    title: 'My Active Jobs', 
+                    subtitle: 'Manage your current cleaning assignments',
+                    icon: '🧹',
+                    color: '#f39c12',
+                    badge: '3'
+                },
+                { 
+                    title: 'Completed Jobs', 
+                    subtitle: 'View your work history and earnings',
+                    icon: '✅',
+                    color: '#27ae60'
+                },
+                { 
+                    title: 'Reviews & Ratings', 
+                    subtitle: 'See what customers are saying',
+                    icon: '⭐',
+                    color: '#e74c3c'
+                },
+                { 
+                    title: 'Profile', 
+                    subtitle: 'Manage your professional profile',
+                    icon: '👤',
+                    color: '#9b59b6'
+                },
+            ];
+
+            const handleLogin = () => {
+                setCurrentScreen('dashboard');
+            };
+
+            const LoginScreen = () => (
+                <div className="screen active">
+                    <div className="login-container">
+                        <div className="login-header">
+                            <div className="login-logo">🧹</div>
+                            <div className="login-title">Cleaning Service</div>
+                            <div className="login-subtitle">Professional cleaning at your fingertips</div>
+                        </div>
+
+                        <div className="login-form">
+                            <div className="input-group">
+                                <label className="label">Email Address</label>
+                                <input 
+                                    type="email" 
+                                    className="input" 
+                                    placeholder="Enter your email"
+                                    defaultValue={userType === 'CUSTOMER' ? 'customer@test.com' : 'cleaner@test.com'}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="label">Password</label>
+                                <input 
+                                    type="password" 
+                                    className="input" 
+                                    placeholder="Enter your password"
+                                    defaultValue="test123"
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="label">I am a...</label>
+                                <div className="role-buttons">
+                                    <div 
+                                        className={`role-button ${userType === 'CUSTOMER' ? 'active' : ''}`}
+                                        onClick={() => setUserType('CUSTOMER')}
+                                    >
+                                        <div className="role-button-text">👤 Customer</div>
+                                    </div>
+                                    <div 
+                                        className={`role-button ${userType === 'CLEANER' ? 'active' : ''}`}
+                                        onClick={() => setUserType('CLEANER')}
+                                    >
+                                        <div className="role-button-text">🧹 Cleaner</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="login-button" onClick={handleLogin}>
+                                <div className="login-button-text">Sign In</div>
+                            </div>
+
+                            <div className="register-button">
+                                <div className="register-button-text">Don't have an account? Sign Up</div>
+                            </div>
+                        </div>
+
+                        <div className="test-accounts">
+                            <div className="test-title">Test Accounts:</div>
+                            <div className="test-account">Customer: customer@test.com / test123</div>
+                            <div className="test-account">Cleaner: cleaner@test.com / test123</div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const DashboardScreen = () => {
+                const stats = userType === 'CUSTOMER' ? customerStats : cleanerStats;
+                const menuItems = userType === 'CUSTOMER' ? customerMenuItems : cleanerMenuItems;
+                const userName = userType === 'CUSTOMER' ? 'John Customer' : 'Sarah Cleaner';
+                const userEmail = userType === 'CUSTOMER' ? 'customer@test.com' : 'cleaner@test.com';
+
+                return (
+                    <div className="screen active">
+                        <div className="dashboard-container">
+                            <div className="header">
+                                <div className="welcome-text">Welcome back,</div>
+                                <div className="user-name">{userName}</div>
+                                <div className="user-email">{userEmail}</div>
+                            </div>
+
+                            <div className="stats-container">
+                                {stats.map((item, index) => (
+                                    <div key={index} className="stat-card" style={{ backgroundColor: item.color }}>
+                                        <div className="stat-icon">{item.icon}</div>
+                                        <div className="stat-value">{item.value}</div>
+                                        <div className="stat-label">{item.label}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="menu-container">
+                                <div className="section-title">Quick Actions</div>
+                                {menuItems.map((item, index) => (
+                                    <div key={index} className="menu-item">
+                                        <div className="menu-icon" style={{ backgroundColor: item.color }}>
+                                            <div>{item.icon}</div>
+                                        </div>
+                                        <div className="menu-content">
+                                            <div className="menu-title">
+                                                {item.title}
+                                                {item.badge && <span className="badge">{item.badge}</span>}
+                                            </div>
+                                            <div className="menu-subtitle">{item.subtitle}</div>
+                                        </div>
+                                        <div className="menu-arrow">›</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            return (
+                <div>
+                    <div className="app-container">
+                        <LoginScreen />
+                        <DashboardScreen />
+                        
+                        <div className="nav-bar">
+                            <div 
+                                className={`nav-item ${currentScreen === 'login' ? 'active' : ''}`}
+                                onClick={() => setCurrentScreen('login')}
+                            >
+                                <div className="nav-icon">🔐</div>
+                                <div className="nav-text">Login</div>
+                            </div>
+                            <div 
+                                className={`nav-item ${currentScreen === 'dashboard' ? 'active' : ''}`}
+                                onClick={() => setCurrentScreen('dashboard')}
+                            >
+                                <div className="nav-icon">📊</div>
+                                <div className="nav-text">Dashboard</div>
+                            </div>
+                            <div 
+                                className="nav-item"
+                                onClick={() => alert('More screens coming soon!')}
+                            >
+                                <div className="nav-icon">🏠</div>
+                                <div className="nav-text">Houses</div>
+                            </div>
+                            <div 
+                                className="nav-item"
+                                onClick={() => alert('More screens coming soon!')}
+                            >
+                                <div className="nav-icon">📋</div>
+                                <div className="nav-text">Jobs</div>
+                            </div>
+                            <div 
+                                className="nav-item"
+                                onClick={() => alert('More screens coming soon!')}
+                            >
+                                <div className="nav-icon">👤</div>
+                                <div className="nav-text">Profile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
